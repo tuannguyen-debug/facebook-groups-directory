@@ -29,7 +29,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg-primary); color:var(-
 /* HEADER */
 .header {
   background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
-  padding: 2rem 2rem 1rem;
+  padding: 1.5rem 2rem 1rem;
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -40,21 +40,46 @@ body { font-family:'Inter',sans-serif; background:var(--bg-primary); color:var(-
   background: radial-gradient(ellipse at 20% 50%, rgba(6,182,212,.12), transparent 50%),
               radial-gradient(ellipse at 80% 50%, rgba(139,92,246,.12), transparent 50%);
 }
+.header-brand {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .8rem;
+}
+.header-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(6,182,212,.3));
+}
+.header-title-group { text-align: left; }
 .header h1 {
   position: relative;
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 800;
   background: linear-gradient(135deg, #06b6d4, #8b5cf6, #f59e0b);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: -0.5px;
+  line-height: 1.2;
 }
-.header p { position:relative; color:var(--text-secondary); margin-top:.4rem; font-size:.95rem; }
+.header .brand-author {
+  position: relative;
+  font-size: .78rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: .5px;
+}
+.header .brand-author span { color: var(--accent-3); font-weight: 700; }
+.header p { position:relative; color:var(--text-secondary); margin-top:.4rem; font-size:.9rem; }
 .header .badge-total {
-  position:relative; display:inline-block; margin-top:.6rem;
+  position:relative; display:inline-block; margin-top:.5rem;
   background: linear-gradient(135deg, rgba(6,182,212,.15), rgba(139,92,246,.15));
   border: 1px solid rgba(6,182,212,.3);
-  padding: .3rem 1rem; border-radius: 20px; font-size: .85rem;
+  padding: .25rem .8rem; border-radius: 20px; font-size: .82rem;
   color: var(--accent-1); font-weight: 600;
 }
 
@@ -78,43 +103,44 @@ body { font-family:'Inter',sans-serif; background:var(--bg-primary); color:var(-
 .tabs-container {
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border);
-  padding: .8rem 1rem 0;
+  padding: .6rem 1rem;
   position: sticky; top: 0; z-index: 100;
 }
-.tabs-scroll {
-  display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .8rem;
-  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+.tabs-grid {
+  display: flex; flex-wrap: wrap; gap: .35rem;
+  justify-content: center;
 }
-.tabs-scroll::-webkit-scrollbar { height: 4px; }
-.tabs-scroll::-webkit-scrollbar-track { background: transparent; }
-.tabs-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 .tab-btn {
-  flex-shrink: 0;
+  flex: 0 0 calc(14.28% - .35rem);
+  min-width: 0;
   background: var(--bg-card);
   border: 1px solid var(--border);
   color: var(--text-secondary);
-  padding: .5rem 1rem;
-  border-radius: 8px 8px 0 0;
-  font-size: .8rem;
+  padding: .45rem .6rem;
+  border-radius: 8px;
+  font-size: .75rem;
   font-family: inherit;
   cursor: pointer;
   transition: all .2s;
   white-space: nowrap;
-  display: flex; align-items: center; gap: .4rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex; align-items: center; justify-content: center; gap: .3rem;
 }
-.tab-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.tab-btn:hover { background: var(--bg-hover); color: var(--text-primary); border-color: rgba(6,182,212,.4); }
 .tab-btn.active {
-  background: linear-gradient(135deg, rgba(6,182,212,.15), rgba(139,92,246,.15));
+  background: linear-gradient(135deg, rgba(6,182,212,.18), rgba(139,92,246,.18));
   border-color: var(--accent-1);
   color: var(--accent-1);
   font-weight: 600;
+  box-shadow: 0 0 12px rgba(6,182,212,.15);
 }
-.tab-btn .tab-icon { font-size: 1rem; }
+.tab-btn .tab-icon { font-size: .9rem; flex-shrink: 0; }
 .tab-btn .tab-count {
-  background: rgba(255,255,255,.1); padding: 1px 6px;
-  border-radius: 10px; font-size: .7rem;
+  background: rgba(255,255,255,.1); padding: 1px 5px;
+  border-radius: 10px; font-size: .65rem; flex-shrink: 0;
 }
-.tab-btn.active .tab-count { background: rgba(6,182,212,.2); }
+.tab-btn.active .tab-count { background: rgba(6,182,212,.25); }
 
 /* CONTROLS */
 .controls {
@@ -214,20 +240,34 @@ td a:hover { color: #67e8f9; text-decoration: underline; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
+@media(max-width:1200px) {
+  .tab-btn { flex: 0 0 calc(16.66% - .35rem); }
+}
+@media(max-width:900px) {
+  .tab-btn { flex: 0 0 calc(25% - .35rem); }
+}
 @media(max-width:768px) {
-  .header h1 { font-size: 1.4rem; }
+  .header h1 { font-size: 1.3rem; }
+  .header-logo { width: 40px; height: 40px; }
   .controls { flex-direction: column; }
   .stats-bar { gap: .5rem; }
   .stat-item { min-width: 100px; padding: .5rem .8rem; }
   .stat-item .value { font-size: 1.1rem; }
   .table-wrap { padding: 0 .5rem 1rem; }
+  .tab-btn { flex: 0 0 calc(33.33% - .35rem); font-size: .7rem; }
 }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>📊 Facebook Groups Database</h1>
+  <div class="header-brand">
+    <img src="logo.png" alt="Tuấn Nguyễn" class="header-logo">
+    <div class="header-title-group">
+      <h1>Facebook Groups Database</h1>
+      <div class="brand-author">by <span>Tuấn Nguyễn</span></div>
+    </div>
+  </div>
   <p>Tổng hợp danh sách Groups Facebook theo chủ đề</p>
   <div class="badge-total" id="totalBadge">Đang tải...</div>
 </div>
@@ -235,7 +275,7 @@ td a:hover { color: #67e8f9; text-decoration: underline; }
 <div class="stats-bar" id="statsBar"></div>
 
 <div class="tabs-container">
-  <div class="tabs-scroll" id="tabsScroll"></div>
+  <div class="tabs-grid" id="tabsScroll"></div>
 </div>
 
 <div class="controls">
