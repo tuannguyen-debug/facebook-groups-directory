@@ -1,0 +1,14 @@
+node_modules/
+*.xlsx
+*.xls
+*.csv
+*.py
+build_real_data.js
+generate_all.js
+generate_groups.js
+convert_to_xlsx.js
+count_data.js
+data_inventory.txt
+scraped_*.json
+facebook_groups_dashboard.html
+facebook_groups_1000.json

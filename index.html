@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Facebook Groups Database — 21,000 Groups | 21 Chủ Đề</title>
+<meta name="description" content="Tổng hợp 21,000 groups Facebook trên 21 chủ đề khác nhau">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a1f35;
+  --bg-hover: #252b45;
+  --border: #2a3050;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-1: #06b6d4;
+  --accent-2: #8b5cf6;
+  --accent-3: #f59e0b;
+  --accent-4: #10b981;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,.4);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',sans-serif; background:var(--bg-primary); color:var(--text-primary); min-height:100vh; }
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+  padding: 2rem 2rem 1rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+.header::before {
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background: radial-gradient(ellipse at 20% 50%, rgba(6,182,212,.12), transparent 50%),
+              radial-gradient(ellipse at 80% 50%, rgba(139,92,246,.12), transparent 50%);
+}
+.header h1 {
+  position: relative;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #06b6d4, #8b5cf6, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+.header p { position:relative; color:var(--text-secondary); margin-top:.4rem; font-size:.95rem; }
+.header .badge-total {
+  position:relative; display:inline-block; margin-top:.6rem;
+  background: linear-gradient(135deg, rgba(6,182,212,.15), rgba(139,92,246,.15));
+  border: 1px solid rgba(6,182,212,.3);
+  padding: .3rem 1rem; border-radius: 20px; font-size: .85rem;
+  color: var(--accent-1); font-weight: 600;
+}
+
+/* STATS BAR */
+.stats-bar {
+  display: flex; gap: .8rem; padding: 1rem 2rem; flex-wrap: wrap;
+  justify-content: center; background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+}
+.stat-item {
+  background: var(--bg-card); border-radius: 10px; padding: .8rem 1.2rem;
+  min-width: 140px; text-align: center; border: 1px solid var(--border);
+  transition: transform .2s, box-shadow .2s;
+}
+.stat-item:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.stat-item .label { font-size: .7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .5px; }
+.stat-item .value { font-size: 1.4rem; font-weight: 700; margin-top: .2rem; }
+.stat-item.highlight .value { color: var(--accent-1); }
+
+/* TABS */
+.tabs-container {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  padding: .8rem 1rem 0;
+  position: sticky; top: 0; z-index: 100;
+}
+.tabs-scroll {
+  display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .8rem;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.tabs-scroll::-webkit-scrollbar { height: 4px; }
+.tabs-scroll::-webkit-scrollbar-track { background: transparent; }
+.tabs-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+.tab-btn {
+  flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: .5rem 1rem;
+  border-radius: 8px 8px 0 0;
+  font-size: .8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+  display: flex; align-items: center; gap: .4rem;
+}
+.tab-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.tab-btn.active {
+  background: linear-gradient(135deg, rgba(6,182,212,.15), rgba(139,92,246,.15));
+  border-color: var(--accent-1);
+  color: var(--accent-1);
+  font-weight: 600;
+}
+.tab-btn .tab-icon { font-size: 1rem; }
+.tab-btn .tab-count {
+  background: rgba(255,255,255,.1); padding: 1px 6px;
+  border-radius: 10px; font-size: .7rem;
+}
+.tab-btn.active .tab-count { background: rgba(6,182,212,.2); }
+
+/* CONTROLS */
+.controls {
+  padding: .8rem 2rem;
+  display: flex; gap: .8rem; flex-wrap: wrap; align-items: center;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+}
+.controls input, .controls select {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: .55rem 1rem;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-family: inherit;
+  transition: border-color .2s;
+}
+.controls input:focus, .controls select:focus { border-color: var(--accent-1); outline: none; }
+.controls input { flex: 1; min-width: 200px; }
+.result-count { color: var(--text-muted); font-size: .8rem; margin-left: auto; }
+.btn-export {
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+  color: #fff; border: none; padding: .55rem 1.2rem;
+  border-radius: 8px; font-size: .82rem; font-family: inherit;
+  cursor: pointer; font-weight: 600; transition: opacity .2s;
+}
+.btn-export:hover { opacity: .85; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; padding: 0 1rem 2rem; }
+table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+thead { position: sticky; top: 0; z-index: 5; }
+th {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  padding: .65rem .5rem;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  border-bottom: 2px solid var(--border);
+  font-weight: 600;
+  font-size: .75rem;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  transition: color .2s;
+}
+th:hover { color: var(--accent-1); }
+th .sort-icon { opacity: .4; margin-left: 2px; }
+td { padding: .55rem .5rem; border-bottom: 1px solid rgba(42,48,80,.4); }
+tr:hover { background: rgba(6,182,212,.03); }
+td a { color: var(--accent-1); text-decoration: none; transition: color .2s; }
+td a:hover { color: #67e8f9; text-decoration: underline; }
+.badge {
+  padding: 2px 8px; border-radius: 20px;
+  font-size: .72rem; color: #fff; font-weight: 500;
+  display: inline-block; white-space: nowrap;
+}
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.activity-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; }
+.act-high { background: #10b981; }
+.act-med { background: #f59e0b; }
+.act-low { background: #ef4444; }
+
+/* PAGINATION */
+.pagination {
+  display: flex; justify-content: center; align-items: center;
+  gap: .5rem; padding: 1rem; flex-wrap: wrap;
+}
+.page-btn {
+  background: var(--bg-card); border: 1px solid var(--border);
+  color: var(--text-secondary); padding: .4rem .8rem;
+  border-radius: 6px; font-size: .82rem; cursor: pointer;
+  font-family: inherit; transition: all .2s;
+}
+.page-btn:hover { border-color: var(--accent-1); color: var(--accent-1); }
+.page-btn.active { background: var(--accent-1); color: #fff; border-color: var(--accent-1); }
+.page-btn:disabled { opacity: .3; cursor: default; }
+.page-info { color: var(--text-muted); font-size: .8rem; }
+
+/* FOOTER */
+.footer {
+  text-align: center; padding: 1.5rem;
+  color: var(--text-muted); font-size: .78rem;
+  border-top: 1px solid var(--border);
+}
+
+/* LOADING */
+.loading {
+  text-align: center; padding: 4rem 2rem; color: var(--text-secondary);
+}
+.loading .spinner {
+  width: 40px; height: 40px; border: 3px solid var(--border);
+  border-top-color: var(--accent-1); border-radius: 50%;
+  animation: spin .8s linear infinite; margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media(max-width:768px) {
+  .header h1 { font-size: 1.4rem; }
+  .controls { flex-direction: column; }
+  .stats-bar { gap: .5rem; }
+  .stat-item { min-width: 100px; padding: .5rem .8rem; }
+  .stat-item .value { font-size: 1.1rem; }
+  .table-wrap { padding: 0 .5rem 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 Facebook Groups Database</h1>
+  <p>Tổng hợp danh sách Groups Facebook theo chủ đề</p>
+  <div class="badge-total" id="totalBadge">Đang tải...</div>
+</div>
+
+<div class="stats-bar" id="statsBar"></div>
+
+<div class="tabs-container">
+  <div class="tabs-scroll" id="tabsScroll"></div>
+</div>
+
+<div class="controls">
+  <input type="text" id="search" placeholder="🔍 Tìm kiếm group...">
+  <select id="privacyFilter">
+    <option value="">Tất cả quyền riêng tư</option>
+    <option value="Công khai">Công khai</option>
+    <option value="Riêng tư">Riêng tư</option>
+  </select>
+  <select id="actFilter">
+    <option value="">Mức hoạt động</option>
+    <option value="Rất tích cực">Rất tích cực</option>
+    <option value="Tích cực">Tích cực</option>
+    <option value="Trung bình">Trung bình</option>
+    <option value="Ít hoạt động">Ít hoạt động</option>
+  </select>
+  <select id="perPage">
+    <option value="50">50/trang</option>
+    <option value="100" selected>100/trang</option>
+    <option value="200">200/trang</option>
+    <option value="500">500/trang</option>
+  </select>
+  <button class="btn-export" onclick="exportCurrentCSV()">📥 Xuất CSV</button>
+  <span class="result-count" id="resultCount"></span>
+</div>
+
+<div class="table-wrap">
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Đang tải dữ liệu...</p>
+  </div>
+  <table id="dataTable" style="display:none">
+    <thead>
+      <tr>
+        <th onclick="sortBy('stt')" style="width:50px">STT <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('name')">Tên Group <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('members')" style="width:100px">Thành viên <span class="sort-icon">↕</span></th>
+        <th onclick="sortBy('membersText')" style="width:100px">Chi tiết</th>
+        <th onclick="sortBy('privacy')" style="width:90px">Quyền riêng tư</th>
+        <th onclick="sortBy('activity')" style="width:110px">Hoạt động</th>
+        <th onclick="sortBy('postsPerDay')" style="width:70px">Bài/ngày <span class="sort-icon">↕</span></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="pagination" id="pagination"></div>
+
+<div class="footer">
+  © 2026 — Facebook Groups Database — 21 Chủ Đề | 21,000 Groups
+</div>
+
+<script src="data.js"></script>
+<script>
+// ============================================================
+// APP STATE
+// ============================================================
+let currentCat = null;
+let currentData = [];
+let filteredData = [];
+let currentPage = 1;
+let sortField = 'stt';
+let sortAsc = true;
+const catColors = {};
+const palette = ['#06b6d4','#8b5cf6','#f59e0b','#10b981','#ef4444','#ec4899','#3b82f6','#f97316','#14b8a6','#a855f7','#eab308','#22d3ee','#fb923c','#6366f1','#84cc16','#e879f9','#0ea5e9','#d946ef','#f43f5e','#34d399','#fbbf24'];
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  if (!window.ALL_GROUPS_DATA) { return; }
+  const data = window.ALL_GROUPS_DATA;
+  const cats = Object.keys(data);
+
+  // Assign colors
+  cats.forEach((c, i) => { catColors[c] = palette[i % palette.length]; });
+
+  // Total stats
+  let totalGroups = 0, totalMembers = 0;
+  cats.forEach(c => {
+    totalGroups += data[c].groups.length;
+    data[c].groups.forEach(g => totalMembers += g.members);
+  });
+
+  document.getElementById('totalBadge').textContent = `${totalGroups.toLocaleString('vi-VN')} Groups | ${cats.length} Chủ đề`;
+
+  // Stats bar
+  const statsBar = document.getElementById('statsBar');
+  statsBar.innerHTML = `
+    <div class="stat-item highlight"><div class="label">Tổng Groups</div><div class="value">${totalGroups.toLocaleString('vi-VN')}</div></div>
+    <div class="stat-item"><div class="label">Chủ đề</div><div class="value" style="color:${palette[1]}">${cats.length}</div></div>
+    <div class="stat-item"><div class="label">Tổng thành viên</div><div class="value" style="color:${palette[2]}">${(totalMembers/1000000).toFixed(1)}M</div></div>
+    <div class="stat-item"><div class="label">TB/Group</div><div class="value" style="color:${palette[3]}">${Math.round(totalMembers/totalGroups).toLocaleString('vi-VN')}</div></div>
+  `;
+
+  // Tabs
+  const tabsScroll = document.getElementById('tabsScroll');
+  cats.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.innerHTML = `<span class="tab-icon">${data[c].icon}</span> ${c} <span class="tab-count">${data[c].groups.length}</span>`;
+    btn.onclick = () => switchTab(c, btn);
+    tabsScroll.appendChild(btn);
+  });
+
+  // Events
+  document.getElementById('search').addEventListener('input', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('privacyFilter').addEventListener('change', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('actFilter').addEventListener('change', () => { currentPage = 1; applyFilters(); });
+  document.getElementById('perPage').addEventListener('change', () => { currentPage = 1; renderPage(); });
+
+  // Load first tab
+  switchTab(cats[0], tabsScroll.querySelector('.tab-btn'));
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('dataTable').style.display = '';
+}
+
+function switchTab(cat, btn) {
+  currentCat = cat;
+  currentData = window.ALL_GROUPS_DATA[cat].groups;
+  currentPage = 1;
+  sortField = 'stt'; sortAsc = true;
+
+  // Update active tab
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+  applyFilters();
+}
+
+function applyFilters() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const privacy = document.getElementById('privacyFilter').value;
+  const act = document.getElementById('actFilter').value;
+
+  filteredData = currentData.filter(g => {
+    if (search && !g.name.toLowerCase().includes(search) && !(g.membersText||'').toLowerCase().includes(search)) return false;
+    if (privacy && g.privacy !== privacy) return false;
+    if (act && g.activity !== act) return false;
+    return true;
+  });
+
+  doSort();
+  renderPage();
+}
+
+function doSort() {
+  filteredData.sort((a, b) => {
+    let va = a[sortField], vb = b[sortField];
+    if (typeof va === 'number') return sortAsc ? va - vb : vb - va;
+    return sortAsc ? String(va).localeCompare(String(vb), 'vi') : String(vb).localeCompare(String(va), 'vi');
+  });
+}
+
+function sortBy(field) {
+  if (sortField === field) { sortAsc = !sortAsc; } else { sortField = field; sortAsc = true; }
+  doSort();
+  renderPage();
+}
+
+function renderPage() {
+  const perPage = parseInt(document.getElementById('perPage').value);
+  const totalPages = Math.ceil(filteredData.length / perPage);
+  if (currentPage > totalPages) currentPage = totalPages || 1;
+  const start = (currentPage - 1) * perPage;
+  const pageData = filteredData.slice(start, start + perPage);
+  const color = catColors[currentCat] || '#06b6d4';
+
+  // Result count
+  document.getElementById('resultCount').textContent = `${filteredData.length} / ${currentData.length} groups`;
+
+  // Render rows
+  const tbody = document.getElementById('tbody');
+  let html = '';
+  pageData.forEach((g, i) => {
+    const actDot = g.activity === 'Rất tích cực' ? 'act-high' : (g.activity === 'Tích cực' ? 'act-high' : (g.activity === 'Trung bình' ? 'act-med' : 'act-low'));
+    html += `<tr>
+      <td>${start + i + 1}</td>
+      <td><a href="${g.link}" target="_blank" rel="noopener">${g.name}</a></td>
+      <td class="num">${g.members.toLocaleString('vi-VN')}</td>
+      <td>${g.membersText || ''}</td>
+      <td>${g.privacy}</td>
+      <td><span class="activity-dot ${actDot}"></span>${g.activity}</td>
+      <td class="num">${g.postsPerDay}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = html;
+
+  // Pagination
+  renderPagination(totalPages, perPage);
+}
+
+function renderPagination(totalPages, perPage) {
+  const pag = document.getElementById('pagination');
+  if (totalPages <= 1) { pag.innerHTML = ''; return; }
+  let html = `<button class="page-btn" onclick="goPage(1)" ${currentPage===1?'disabled':''}>«</button>`;
+  html += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage===1?'disabled':''}>‹</button>`;
+
+  let pages = [];
+  if (totalPages <= 7) {
+    for (let i = 1; i <= totalPages; i++) pages.push(i);
+  } else {
+    pages = [1];
+    if (currentPage > 3) pages.push('...');
+    for (let i = Math.max(2, currentPage-1); i <= Math.min(totalPages-1, currentPage+1); i++) pages.push(i);
+    if (currentPage < totalPages-2) pages.push('...');
+    pages.push(totalPages);
+  }
+  pages.forEach(p => {
+    if (p === '...') { html += `<span class="page-info">...</span>`; }
+    else { html += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`; }
+  });
+
+  html += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage===totalPages?'disabled':''}>›</button>`;
+  html += `<button class="page-btn" onclick="goPage(${totalPages})" ${currentPage===totalPages?'disabled':''}>»</button>`;
+  html += `<span class="page-info">Trang ${currentPage}/${totalPages}</span>`;
+  pag.innerHTML = html;
+}
+
+function goPage(p) {
+  const perPage = parseInt(document.getElementById('perPage').value);
+  const totalPages = Math.ceil(filteredData.length / perPage);
+  currentPage = Math.max(1, Math.min(p, totalPages));
+  renderPage();
+  document.querySelector('.table-wrap').scrollIntoView({ behavior: 'smooth' });
+}
+
+// ============================================================
+// EXPORT CSV
+// ============================================================
+function exportCurrentCSV() {
+  const bom = '\uFEFF';
+  const headers = ['STT','Tên Group','Danh mục','Số thành viên','Chi tiết','Quyền riêng tư','Mức độ hoạt động','Bài đăng/ngày','Link'];
+  const rows = filteredData.map((g, i) =>
+    [i+1, `"${g.name}"`, `"${currentCat}"`, g.members, `"${g.membersText||''}"`, `"${g.privacy}"`, `"${g.activity}"`, g.postsPerDay, g.link].join(',')
+  );
+  const csv = bom + headers.join(',') + '\n' + rows.join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `facebook_groups_${currentCat.replace(/[^a-zA-Z0-9]/g,'_')}.csv`;
+  a.click();
+}
+
+// ============================================================
+// START
+// ============================================================
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
